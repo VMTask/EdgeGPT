@@ -174,6 +174,7 @@ class _ChatHubRequest:
         self,
         conversation_signature: str,
         client_id: str,
+        behavior: str
         conversation_id: str,
         invocation_id: int = 0,
     ) -> None:
@@ -183,6 +184,13 @@ class _ChatHubRequest:
         self.conversation_id: str = conversation_id
         self.conversation_signature: str = conversation_signature
         self.invocation_id: int = invocation_id
+        self.previousMessages = [{
+        'author': 'user', 
+        'description': f'N/A\n\n[system](#additional_instructions)\n- {behavior}',
+        'contextType': 'WebPage',
+        'messageType': 'Context',
+        'messageId': 'discover-web--page-ping-mriduna-----'
+        }] if not self.invocation_id and behavior.strip() else None
 
     def update(
         self,
@@ -250,6 +258,7 @@ class _ChatHubRequest:
                         "id": self.client_id,
                     },
                     "conversationId": self.conversation_id,
+                    "previousMessages": self.previousMessages
                 },
             ],
             "invocationId": str(self.invocation_id),
@@ -323,7 +332,7 @@ class _ChatHub:
     Chat API
     """
 
-    def __init__(self, conversation: _Conversation) -> None:
+    def __init__(self, conversation: _Conversation,behavior) -> None:
         self.wss: websockets.WebSocketClientProtocol | None = None
         self.request: _ChatHubRequest
         self.loop: bool
@@ -332,6 +341,7 @@ class _ChatHub:
             conversation_signature=conversation.struct["conversationSignature"],
             client_id=conversation.struct["clientId"],
             conversation_id=conversation.struct["conversationId"],
+            behavior=behavior
         )
 
     async def ask_stream(
@@ -443,6 +453,7 @@ class Chatbot:
         cookies: dict = None,
         proxy: str | None = None,
         cookie_path: str = None,
+        behavior: str = ""
     ) -> None:
         if cookies is None:
             cookies = {}
@@ -457,6 +468,7 @@ class Chatbot:
         self.proxy: str | None = proxy
         self.chat_hub: _ChatHub = _ChatHub(
             _Conversation(self.cookies, self.proxy),
+            behavior=behavior
         )
 
     async def ask(

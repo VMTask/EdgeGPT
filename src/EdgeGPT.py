@@ -117,7 +117,6 @@ class ConversationStyle(Enum):
         "dv3sugg",
         "clgalileo",
         "gencontentv3",
-        "nojbfedge",
     ]
     balanced = [
         "nlu_direct_response_filter",
@@ -125,7 +124,7 @@ class ConversationStyle(Enum):
         "disable_emoji_spoken_text",
         "responsible_ai_policy_235",
         "enablemm",
-        "harmonyv3",
+        "galileo",
         "cachewriteext",
         "e2ecachewrite",
         "nodlcpcwrite",
@@ -133,7 +132,6 @@ class ConversationStyle(Enum):
         "saharasugg",
         "enablenewsfc",
         "dv3sugg",
-        "nojbfedge",
     ]
     precise = [
         "nlu_direct_response_filter",
@@ -151,7 +149,6 @@ class ConversationStyle(Enum):
         "dv3sugg",
         "clgalileo",
         "gencontentv3",
-        "nojbfedge",
     ]
 
 
